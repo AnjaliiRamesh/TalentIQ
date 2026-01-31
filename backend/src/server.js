@@ -13,6 +13,7 @@ import sessionRoutes from "./routes/sessionRoute.js";
 
 const app = express();
 
+//used when deploying
 const __dirname = path.resolve();
 
 // middleware
@@ -35,13 +36,20 @@ app.get("/health", (req, res) => {
 });
 
 // make our app ready for deployment
-if (ENV.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../frontend/dist")));
+// if (ENV.NODE_ENV === "production") {
+//   app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
-  app.get("/{*any}", (req, res) => {
-    res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
+//   app.get("/{*any}", (req, res) => {
+//     res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
+//   });
+// }
+
+app.use(express.static(path.join(__dirname, "../frontend/dist")));
+
+app.get("/{*any}", (_, res) => {
+    res.sendFile(path.resolve(__dirname, "../frontend", "dist", "index.html"));
   });
-}
+
 
 const startServer = async () => {
   try {
