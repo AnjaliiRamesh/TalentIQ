@@ -1,4 +1,6 @@
-import { clipPath } from "framer-motion/client";
+// import { clipPath } from "framer-motion/client";
+// import { motion } from "framer-motion";
+
 
 export const PROBLEMS = {
   "two-sum": {
