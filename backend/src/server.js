@@ -19,9 +19,20 @@ const __dirname = path.resolve();
 // middleware
 app.use(express.json());
 // credentials:true meaning?? => server allows a browser to include cookies on request
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "https://talentiq-frontend3.onrender.com",
+];
+
+// Add CLIENT_URL if it's set in environment
+if (ENV.CLIENT_URL && !allowedOrigins.includes(ENV.CLIENT_URL)) {
+  allowedOrigins.push(ENV.CLIENT_URL);
+}
+
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:5174", ENV.CLIENT_URL],
+    origin: allowedOrigins,
     credentials: true,
   })
 );
