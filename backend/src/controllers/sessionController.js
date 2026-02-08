@@ -18,26 +18,41 @@ export async function createSession(req, res) {
     const session = await Session.create({ problem, difficulty, host: userId, callId });
 
     // create stream video call
-    await streamClient.video.call("default", callId).getOrCreate({
-      data: {
-        created_by_id: clerkId,
-        custom: { problem, difficulty, sessionId: session._id.toString() },
-      },
-    });
+    try {
+      const call = streamClient.video.call("default", callId);
+      await call.getOrCreate({
+        data: {
+          created_by_id: clerkId,
+          custom: { problem, difficulty, sessionId: session._id.toString() },
+        },
+      });
+    } catch (streamError) {
+      console.error("Error creating Stream video call:", streamError);
+      // Rollback session creation if video call fails
+      await Session.findByIdAndDelete(session._id);
+      throw new Error(`Failed to create video call: ${streamError.message}`);
+    }
 
     // chat messaging
-    const channel = chatClient.channel("messaging", callId, {
-      name: `${problem} Session`,
-      created_by_id: clerkId,
-      members: [clerkId],
-    });
+    try {
+      const channel = chatClient.channel("messaging", callId, {
+        name: `${problem} Session`,
+        created_by_id: clerkId,
+        members: [clerkId],
+      });
 
-    await channel.create();
+      await channel.create();
+    } catch (channelError) {
+      console.error("Error creating Stream channel:", channelError);
+      // Rollback session creation if channel creation fails
+      await Session.findByIdAndDelete(session._id);
+      throw new Error(`Failed to create chat channel: ${channelError.message}`);
+    }
 
     res.status(201).json({ session });
   } catch (error) {
-    console.log("Error in createSession controller:", error.message);
-    res.status(500).json({ message: "Internal Server Error" });
+    console.error("Error in createSession controller:", error);
+    res.status(500).json({ message: error.message || "Internal Server Error" });
   }
 }
 

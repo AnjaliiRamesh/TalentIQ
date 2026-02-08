@@ -68,10 +68,28 @@ if (ENV.NODE_ENV === "production") {
 const startServer = async () => {
   try {
     await connectDB();
-    app.listen(ENV.PORT, () => console.log("Server is running on port:", ENV.PORT));
+
+    // Prefer the platform-provided PORT, then ENV.PORT, then fallback to 3000
+    const PORT = process.env.PORT || ENV.PORT || 3000;
+
+    // Listen on 0.0.0.0 so the service is reachable from Render's network
+    app.listen(PORT, "0.0.0.0", () => console.log("Server is running on port:", PORT));
   } catch (error) {
     console.error("Error starting the server", error);
+    // Exit with a non-zero code so Render marks the deploy as failed
+    process.exit(1);
   }
 };
+
+// Log and exit on unhandled errors so we can diagnose deploy failures
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("Unhandled Rejection at:", promise, "reason:", reason);
+  process.exit(1);
+});
+
+process.on("uncaughtException", (err) => {
+  console.error("Uncaught Exception thrown:", err);
+  process.exit(1);
+});
 
 startServer();
