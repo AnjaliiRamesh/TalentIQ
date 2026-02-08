@@ -45,7 +45,7 @@ app.use("/api/sessions", sessionRoutes);
 app.get("/health", (req, res) => {
   res.status(200).json({ msg: "api is up and running" });
 });
-app.get("/", (req, res) => {
+app.get("/books", (req, res) => {
   res.status(200).json({ msg: "Server is up and running" });
 });
 
