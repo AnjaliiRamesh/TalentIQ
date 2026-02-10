@@ -1,4 +1,5 @@
-import { useUser } from "@clerk/clerk-react";
+import { useAuth, useUser } from "@clerk/clerk-react";
+import { useEffect } from "react";
 import { Navigate, Route, Routes } from "react-router";
 import HomePage from "./pages/HomePage";
 
@@ -7,9 +8,17 @@ import DashboardPage from "./pages/DashboardPage";
 import ProblemPage from "./pages/ProblemPage";
 import ProblemsPage from "./pages/ProblemsPage";
 import SessionPage from "./pages/SessionPage";
+import { setAxiosAuthTokenGetter } from "./lib/axios";
 
 function App() {
   const { isSignedIn, isLoaded } = useUser();
+  const { getToken } = useAuth();
+
+  useEffect(() => {
+    setAxiosAuthTokenGetter(() => getToken());
+
+    return () => setAxiosAuthTokenGetter(null);
+  }, [getToken]);
 
   // this will get rid of the flickering effect
   if (!isLoaded) return null;
