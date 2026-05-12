@@ -38,14 +38,14 @@ app.use(
 );
 app.use(clerkMiddleware()); // this adds auth field to request object: req.auth()
 
-// app.use("/api/inngest", serve({ client: inngest, functions }));
+app.use("/api/inngest", serve({ client: inngest, functions }));
 // ✅ Safe — only allows the 3 methods Inngest actually needs
-const handler = serve({ client: inngest, functions });
+// const handler = serve({ client: inngest, functions });
 app.get("/api/inngest", handler);
 app.post("/api/inngest", handler);
 app.put("/api/inngest", handler);
-// app.use("/api/chat", chatRoutes);
-// app.use("/api/sessions", sessionRoutes);
+app.use("/api/chat", chatRoutes);
+app.use("/api/sessions", sessionRoutes);
 
 app.get("/health", (req, res) => {
   res.status(200).json({ msg: "api is up and running" });
