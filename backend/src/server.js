@@ -22,7 +22,7 @@ app.use(express.json());
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:5174",
-  "https://talentiq-frontend3.onrender.com",
+  "https://talent-iq-12tq.vercel.app",
 ];
 
 // Add CLIENT_URL if it's set in environment
