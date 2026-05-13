@@ -55,22 +55,24 @@ app.get("/books", (req, res) => {
 });
 
 // make our app ready for deployment
-if (ENV.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
-  // Serve frontend's index.html for any unmatched GET request that accepts HTML.
-  // Use `app.use` middleware instead of `app.get("/*", ...)` to avoid
-  // path-to-regexp parsing issues across different Express versions.
-  app.use((req, res, next) => {
-    if (req.method !== "GET") return next();
-    const accept = req.headers.accept || "";
-    if (!accept.includes("text/html")) return next();
+// if (ENV.NODE_ENV === "production") {
+//   app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
-    res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"), (err) => {
-      if (err) next(err);
-    });
-  });
-}
+//   // Serve frontend's index.html for any unmatched GET request that accepts HTML.
+//   // Use `app.use` middleware instead of `app.get("/*", ...)` to avoid
+//   // path-to-regexp parsing issues across different Express versions.
+//   app.use((req, res, next) => {
+//     if (req.method !== "GET") return next();
+//     const accept = req.headers.accept || "";
+//     if (!accept.includes("text/html")) return next();
+
+//     res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"), (err) => {
+//       if (err) next(err);
+//     });
+//   });
+// }
+
 
 // app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
