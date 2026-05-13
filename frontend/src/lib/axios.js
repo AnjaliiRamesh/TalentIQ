@@ -22,14 +22,22 @@ const getFallbackRenderApiUrl = () => {
 
 const getApiBaseUrl = () => {
   const envApiUrl = normalizeBaseUrl(import.meta.env.VITE_API_URL);
+  console.log("VITE_API_URL raw:", import.meta.env.VITE_API_URL);
+  console.log("Computed base URL:", envApiUrl);
   if (envApiUrl) return envApiUrl;
 
+
+  
   if (import.meta.env.PROD) {
     const renderFallback = getFallbackRenderApiUrl();
+    console.log("Render fallback:", renderFallback);
     if (renderFallback) return renderFallback;
   }
 
+  console.log("Falling back to /api");
   return "/api";
+
+ 
 };
 
 const axiosInstance = axios.create({
