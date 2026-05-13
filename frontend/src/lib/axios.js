@@ -4,7 +4,8 @@ const normalizeBaseUrl = (value) => {
   if (!value) return null;
   const trimmed = value.trim().replace(/\/+$/, "");
   if (!trimmed) return null;
-  return trimmed.endsWith("/api") ? trimmed : `${trimmed}/api`;
+  // return trimmed.endsWith("/api") ? trimmed : `${trimmed}/api/`;
+   return trimmed.endsWith("/api") ? `${trimmed}/` : `${trimmed}/api/`;
 };
 
 const getFallbackRenderApiUrl = () => {
@@ -35,7 +36,7 @@ const getApiBaseUrl = () => {
   }
 
   console.log("Falling back to /api");
-  return "/api";
+  return "/api/";
 
  
 };
