@@ -52,6 +52,16 @@ app.get("/api/test", (req, res) => {
   res.json({ msg: "api test route works" });
 });
 
+// TEMP: debug route
+app.get("/api/debug", (req, res) => {
+  res.json({
+    hasStreamKey: !!process.env.STREAM_API_KEY,
+    hasStreamSecret: !!process.env.STREAM_API_SECRET,
+    hasClerkSecret: !!process.env.CLERK_SECRET_KEY,
+    nodeEnv: process.env.NODE_ENV,
+  });
+});
+
 app.get("/health", (req, res) => {
   res.status(200).json({ msg: "api is up and running" });
 });
