@@ -45,7 +45,16 @@ app.get("/api/inngest", handler);
 app.post("/api/inngest", handler);
 app.put("/api/inngest", handler);
 app.use("/api/chat", chatRoutes);
+
+//cgech active session
+app.get("/api/sessions/active", (req, res) => {
+  res.json({ msg: "direct sessions route works" });
+});
 app.use("/api/sessions", sessionRoutes);
+
+// TEMP: confirm imports loaded
+console.log("chatRoutes type:", typeof chatRoutes);
+console.log("sessionRoutes type:", typeof sessionRoutes);
 
 // TEMP: test route - remove after debugging
 app.get("/api/test", (req, res) => {
