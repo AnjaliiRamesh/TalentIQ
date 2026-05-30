@@ -42,11 +42,7 @@ app.use(clerkMiddleware()); // this adds auth field to request object: req.auth(
 
 // app.use("/api/inngest", serve({ client: inngest, functions }));
 // ✅ Safe — only allows the 3 methods Inngest actually needs
-const handler = serve({ client: inngest, functions });
-app.get("/api/inngest", handler);
-app.post("/api/inngest", handler);
-app.put("/api/inngest", handler);
-app.use("/api/chat", chatRoutes);
+
 
 //confirm active session
 // app.get("/api/sessions/active", (req, res) => {
@@ -84,6 +80,7 @@ const handler = serve({ client: inngest, functions });
 app.get("/api/inngest", handler);
 app.post("/api/inngest", handler);
 app.put("/api/inngest", handler);
+app.use("/api/chat", chatRoutes);
 // make our app ready for deployment
 
 // if (ENV.NODE_ENV === "production") {
