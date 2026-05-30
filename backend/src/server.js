@@ -47,6 +47,11 @@ app.put("/api/inngest", handler);
 app.use("/api/chat", chatRoutes);
 app.use("/api/sessions", sessionRoutes);
 
+// TEMP: test route - remove after debugging
+app.get("/api/test", (req, res) => {
+  res.json({ msg: "api test route works" });
+});
+
 app.get("/health", (req, res) => {
   res.status(200).json({ msg: "api is up and running" });
 });
