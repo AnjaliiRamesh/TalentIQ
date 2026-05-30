@@ -1,8 +1,10 @@
 import express from "express";
 import path from "path";
 import cors from "cors";
-import { serve } from "inngest/express";
+// import { serve } from "inngest/express";
+import { serve } from "inngest/node";
 import { clerkMiddleware } from "@clerk/express";
+
 
 import { ENV } from "./lib/env.js";
 import { connectDB } from "./lib/db.js";
@@ -46,30 +48,30 @@ app.post("/api/inngest", handler);
 app.put("/api/inngest", handler);
 app.use("/api/chat", chatRoutes);
 
-//cgech active session
-app.get("/api/sessions/active", (req, res) => {
-  res.json({ msg: "direct sessions route works" });
-});
+//confirm active session
+// app.get("/api/sessions/active", (req, res) => {
+//   res.json({ msg: "direct sessions route works" });
+// });
 app.use("/api/sessions", sessionRoutes);
 
 // TEMP: confirm imports loaded
-console.log("chatRoutes type:", typeof chatRoutes);
-console.log("sessionRoutes type:", typeof sessionRoutes);
+// console.log("chatRoutes type:", typeof chatRoutes);
+// console.log("sessionRoutes type:", typeof sessionRoutes);
 
 // TEMP: test route - remove after debugging
-app.get("/api/test", (req, res) => {
-  res.json({ msg: "api test route works" });
-});
+// app.get("/api/test", (req, res) => {
+//   res.json({ msg: "api test route works" });
+// });
 
 // TEMP: debug route
-app.get("/api/debug", (req, res) => {
-  res.json({
-    hasStreamKey: !!process.env.STREAM_API_KEY,
-    hasStreamSecret: !!process.env.STREAM_API_SECRET,
-    hasClerkSecret: !!process.env.CLERK_SECRET_KEY,
-    nodeEnv: process.env.NODE_ENV,
-  });
-});
+// app.get("/api/debug", (req, res) => {
+//   res.json({
+//     hasStreamKey: !!process.env.STREAM_API_KEY,
+//     hasStreamSecret: !!process.env.STREAM_API_SECRET,
+//     hasClerkSecret: !!process.env.CLERK_SECRET_KEY,
+//     nodeEnv: process.env.NODE_ENV,
+//   });
+// });
 
 app.get("/health", (req, res) => {
   res.status(200).json({ msg: "api is up and running" });
@@ -78,6 +80,10 @@ app.get("/books", (req, res) => {
   res.status(200).json({ msg: "Server is up and running" });
 });
 
+const handler = serve({ client: inngest, functions });
+app.get("/api/inngest", handler);
+app.post("/api/inngest", handler);
+app.put("/api/inngest", handler);
 // make our app ready for deployment
 
 // if (ENV.NODE_ENV === "production") {
