@@ -21,16 +21,24 @@ const __dirname = path.resolve();
 // middleware
 app.use(express.json());
 // credentials:true meaning?? => server allows a browser to include cookies on request
+// const allowedOrigins = [
+//   "http://localhost:5173",
+//   "http://localhost:5174",
+//   "https://talent-iq-frontend-nine.vercel.app",
+// ];
+
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:5174",
-  "https://talent-iq-12tq.vercel.app",
 ];
 
-// Add CLIENT_URL if it's set in environment
-if (ENV.CLIENT_URL && !allowedOrigins.includes(ENV.CLIENT_URL)) {
+if (ENV.CLIENT_URL) {
   allowedOrigins.push(ENV.CLIENT_URL);
 }
+// Add CLIENT_URL if it's set in environment
+// if (ENV.CLIENT_URL && !allowedOrigins.includes(ENV.CLIENT_URL)) {
+//   allowedOrigins.push(ENV.CLIENT_URL);
+// }
 
 app.use(
   cors({
@@ -39,6 +47,17 @@ app.use(
   })
 );
 app.use(clerkMiddleware()); // this adds auth field to request object: req.auth()
+app.get("/api/debug-auth", (req, res) => {
+  try {
+    res.json({
+      auth: req.auth(),
+    });
+  } catch (error) {
+    res.json({
+      error: error.message,
+    });
+  }
+});
 
 // app.use("/api/inngest", serve({ client: inngest, functions }));
 // ✅ Safe — only allows the 3 methods Inngest actually needs
